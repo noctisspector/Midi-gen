@@ -1,7 +1,8 @@
-#include "Note.h"
-#include "Music.h"
+#include "../Note.h"
+#include "../Music.h"
 #include "Scale.h"
 #include <vector>
+#include <cassert>
 
 static std::vector<int> b3p = { 0, 2, 4, 6, 7, 9, 11 };
 static std::vector<int> b2p = { 0, 2, 4, 5, 7, 9, 11 };
@@ -12,10 +13,17 @@ static std::vector<int> b2n = { 0, 1, 3, 5, 7, 8, 10 };
 static std::vector<int> b3n = { 0, 1, 3, 5, 6, 8, 10 };
 
 Scale::Scale()
-    : brightness(2), start_pitch(30) { };
+    : brightness(2), start_pitch(30) { }
 
 Scale::Scale(int brightness_, int start_pitch_)
-    : brightness(brightness_), start_pitch(start_pitch_) { };
+    : brightness(brightness_), start_pitch(start_pitch_) 
+    {
+        assert(brightness < 4);
+        assert(brightness > -4);
+    }
+
+Scale::Scale(const Scale *scale)
+    : brightness(scale->brightness), start_pitch(scale->start_pitch) { };
 
 static int scaleData(int brightLevel, int position)
 {
@@ -38,10 +46,10 @@ Note *Scale::grabNote(int position) const
 
 }
 
-Note *Scale::grabNote(int position, int start) const
+Note *Scale::grabNote(int position, int time) const
 {
 
-    return new Note(start_pitch + scaleData(brightness, position), 1, start);
+    return new Note(start_pitch + scaleData(brightness, position), 1, time);
 
 }
 
@@ -74,16 +82,16 @@ std::vector<Note*> *Scale::grabChord() const
 void Scale::toMidi(smf::MidiFile &midiFile) const
 {
 
-    int line = 0;
+    int time = 0;
 
     for (int i = 0; i < 30; i++)
     {
 
-        Note *note = grabNote(i, line);
+        Note *note = grabNote(i, time);
         note->toMidi(midiFile);
 
         delete note;
-        line += 2;
+        time += 2;
 
     }
 

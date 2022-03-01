@@ -12,6 +12,9 @@ Note::Note(int pitch_, double duration_, double time_)
 Note::Note(int pitch_)
     : pitch(pitch_), duration(1), time(0) { };
 
+Note::Note(const Note *note)
+    : pitch(note->pitch), duration(note->duration), time(note->time) { };
+
 void Note::toMidi(smf::MidiFile &midiFile) const
 {
 
@@ -21,4 +24,24 @@ void Note::toMidi(smf::MidiFile &midiFile) const
     midiFile.addNoteOn (0, starttick, 0, pitch, 50);
     midiFile.addNoteOff(0, endtick,   0, pitch);
 
+}
+
+void Note::setPitch(int pitch_)
+{
+    pitch = pitch_;
+}
+
+void Note::setDuration(int duration_)
+{
+    duration = duration_;
+}
+
+void Note::setTime(int time_)
+{
+    time = time_;
+}
+
+void Note::octave(int octaves)
+{
+    pitch += 12 * octaves;
 }

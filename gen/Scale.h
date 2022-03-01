@@ -1,6 +1,6 @@
 #pragma once
-#include "Note.h"
-#include "Music.h"
+#include "../Note.h"
+#include "../Music.h"
 #include <vector>
 
 class Scale : public Music
@@ -13,6 +13,7 @@ private:
 public:
                             Scale       ();
                             Scale       (int brightness_, int start_pitch_);
+                            Scale       (const Scale *scale);
     Note                    *grabNote   (int position) const;
     Note                    *grabNote   (int position, int start) const;
     std::vector<Note*>      *grabChord  () const;

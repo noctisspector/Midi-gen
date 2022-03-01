@@ -1,34 +1,4 @@
-##
-## Main GNU makefile for Midifile library.
-##
-## Programmer:    Craig Stuart Sapp <craig@ccrma.stanford.edu>
-## Creation Date: Sun Apr  3 00:44:44 PST 2005
-## Last Modified: Mon Feb  9 12:59:54 PST 2015
-## Filename:      midifile/Makefile
-## Website:       http://midifile.sapp.org
-## Syntax:        GNU Makefile
-## Description:   This Makefile can create the Midifile library and/or
-##                example programs which use the Midifile library.
-##
-## To run this makefile, type:
-##     make library
-## then:
-##     make programs
-## Or type:
-##     make
-## to compile both the library and the programs at the same time.
-##
-## NB: To build on Windows with Visual Studio, use visual-studio/midifile.sln
-##     instead of this Makefile.
-##
 
-
-##############################
-##
-## Targets:
-##
-
-# targets which don't actually refer to files
 .PHONY : all info library examples programs bin options clean lib
 
 
@@ -69,12 +39,7 @@ programs:
 
 
 options:
-# The Options class is borrowed from optionlib:
-#     https://github.com/craigsapp/optionlib
-# This code downloads the most recent version of the Option class, and the
-# Option class should not be modified within this library.  The Option
-# class is only needed by some of the example programs.  It is not 
-# necessary if you only want to use the compiled MidiFile library.
+
 ifneq ($(shell which wget),)
 	wget https://raw.githubusercontent.com/craigsapp/optionlib/master/src/Options.cpp -O src/Options.cpp
 	wget https://raw.githubusercontent.com/craigsapp/optionlib/master/include/Options.h -O include/Options.h
@@ -83,13 +48,10 @@ else ifneq ($(shell which curl),)
 	curl https://raw.githubusercontent.com/craigsapp/optionlib/master/include/Options.h -O include/Options.h
 endif
 
-main.exe: main.cpp lib/Binasc.cpp lib/MidiEvent.cpp lib/MidiEventList.cpp lib/MidiFile.cpp lib/MidiMessage.cpp lib/Options.cpp Music.cpp Note.cpp Scale.cpp
-	$(CXX) $(CXXFLAGS) main.cpp lib/Binasc.cpp lib/MidiEvent.cpp lib/MidiEventList.cpp lib/MidiFile.cpp lib/MidiMessage.cpp lib/Options.cpp Music.cpp Note.cpp Scale.cpp -o main.exe
+main.exe: main.cpp lib/Binasc.cpp lib/MidiEvent.cpp lib/MidiEventList.cpp lib/MidiFile.cpp lib/MidiMessage.cpp lib/Options.cpp Music.cpp Note.cpp gen/Scale.cpp gen/Motif.cpp
+	$(CXX) $(CXXFLAGS) main.cpp lib/Binasc.cpp lib/MidiEvent.cpp lib/MidiEventList.cpp lib/MidiFile.cpp lib/MidiMessage.cpp lib/Options.cpp Music.cpp Note.cpp gen/Scale.cpp gen/Motif.cpp -o main.exe
 
-##############################
-##
-## Default target: compile a particular program:
-##
+
 
 %:
 	@-mkdir -p bin
